@@ -261,6 +261,96 @@ By default `OTA_BUTTON_PIN` is set to **GPIO 38** (`BUTTON` / SW38), which alrea
 
 ---
 
+## WiFi QR code
+
+A ready-to-scan QR code for joining the device's WPA2 network is kept at
+[`media/wifi-qr.png`](./media/wifi-qr.png). It encodes the standard WiFi QR
+payload for the default AP defined in `src/main.cpp`:
+
+```
+WIFI:T:WPA;S:mssg ina bttl (key: bottle123);P:bottle123;;
+```
+
+Most phone cameras will offer to join the network automatically when they scan
+it.
+
+The firmware can also display the same QR code on the built-in TFT. At boot the
+screen shows the SSID and password as white text on a black background.
+Pressing the **BOOT button (GPIO 0)** cycles the display through three states:
+
+1. Network text (white on black)
+2. QR code — black modules on white background
+3. QR code — white modules on black background
+
+A fourth press returns to the network text. The bitmap is embedded in flash as
+[`src/wifi_qr_bitmap.h`](./src/wifi_qr_bitmap.h).
+
+### Regenerating the QR code
+
+The project uses a small Python virtual environment for tooling. To rebuild both
+the printable PNG and the embedded TFT bitmap after changing the SSID or
+password:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install "qrcode[pil]"
+python3 - << 'PY'
+from PIL import Image
+import qrcode
+
+ssid = "mssg ina bttl (key: bottle123)"
+password = "bottle123"
+wifi_data = f"WIFI:T:WPA;S:{ssid};P:{password};;"
+
+# Printable PNG
+qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M,
+                   box_size=10, border=4)
+qr.add_data(wifi_data)
+qr.make(fit=True)
+qr.make_image(fill_color="black", back_color="white").save("media/wifi-qr.png")
+print("Generated media/wifi-qr.png")
+
+# Embedded 128x128 bitmap for TFT
+qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M,
+                   box_size=4, border=2)
+qr.add_data(wifi_data)
+qr.make(fit=True)
+img = qr.make_image(fill_color="black", back_color="white").convert("1")
+img = img.resize((128, 128), Image.NEAREST)
+
+w, h = img.size
+bytes_per_row = (w + 7) // 8
+bitmap = []
+for y in range(h):
+    for x in range(0, w, 8):
+        byte = 0
+        for b in range(8):
+            if x + b < w and img.getpixel((x + b, y)) == 0:
+                byte |= (1 << (7 - b))
+        bitmap.append(byte)
+
+with open("src/wifi_qr_bitmap.h", "w") as f:
+    f.write("#pragma once\n")
+    f.write("// Auto-generated WiFi QR code bitmap\n")
+    f.write(f"// Payload: {wifi_data}\n\n")
+    f.write(f"#define WIFI_QR_WIDTH {w}\n")
+    f.write(f"#define WIFI_QR_HEIGHT {h}\n\n")
+    f.write(f"const uint8_t WIFI_QR_BITMAP[{len(bitmap)}] PROGMEM = {{\n  ")
+    for i, b in enumerate(bitmap):
+        f.write(f"0x{b:02x}")
+        if i != len(bitmap) - 1:
+            f.write(", ")
+        if (i + 1) % 16 == 0:
+            f.write("\n  ")
+    f.write("\n};\n")
+
+print(f"Generated src/wifi_qr_bitmap.h ({w}x{h}, {len(bitmap)} bytes)")
+PY
+```
+
+---
+
 ## Configuration & Usage
 
 ### Default Network Settings

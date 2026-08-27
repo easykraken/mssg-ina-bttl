@@ -7,14 +7,14 @@
 #include <ArduinoJson.h>
 #include <time.h>
 #include <math.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7789.h>
+#include "wifi_qr_bitmap.h"
 #include "mbedtls/pk.h"
 #include "mbedtls/sha256.h"
 #include "mbedtls/base64.h"
 #include "mbedtls/md.h"
 #include "mbedtls/pkcs5.h"
-#include <Adafruit_GFX.h>
-#include <Adafruit_ST7789.h>
-#include "wifi_qr_bitmap.h"
 
 // ===================== TFT ===================== //
 // Adafruit Feather ESP32-S2 TFT built-in display
@@ -66,8 +66,8 @@ void drawTftText()
 
 void drawTftQr(bool inverted)
 {
-  uint16_t bgColor = inverted ? ST77XX_BLACK : ST77XX_ORANGE;
-  uint16_t fgColor = inverted ? ST77XX_ORANGE : ST77XX_BLACK;
+  uint16_t bgColor = inverted ? ST77XX_BLACK : ST77XX_WHITE;
+  uint16_t fgColor = inverted ? ST77XX_WHITE : ST77XX_BLACK;
 
   tft.fillScreen(bgColor);
 
