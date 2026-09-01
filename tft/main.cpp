@@ -89,11 +89,11 @@ void drawTftQr(bool inverted)
 void initTft()
 {
   pinMode(TFT_BACKLIGHT, OUTPUT);
-  digitalWrite(TFT_BACKLIGHT, HIGH);
+  digitalWrite(TFT_BACKLIGHT, LOW); // start blank/off until BOOT button pressed
 
   tft.init(135, 240);
   tft.setRotation(1);
-  drawTftText();
+  // currentTftView defaults to VIEW_BLANK; backlight is off
 
   if (QR_BUTTON_PIN >= 0)
   {
@@ -120,7 +120,13 @@ void updateQrButton()
       if (qrButtonState == LOW)
       {
         Serial.println("[TFT] BOOT button pressed — cycling view");
-        if (currentTftView == VIEW_TEXT)
+        if (currentTftView == VIEW_BLANK)
+        {
+          digitalWrite(TFT_BACKLIGHT, HIGH);
+          currentTftView = VIEW_TEXT;
+          drawTftText();
+        }
+        else if (currentTftView == VIEW_TEXT)
         {
           currentTftView = VIEW_QR;
           drawTftQr(false); // black on white
@@ -132,8 +138,9 @@ void updateQrButton()
         }
         else
         {
-          currentTftView = VIEW_TEXT;
-          drawTftText();
+          currentTftView = VIEW_BLANK;
+          tft.fillScreen(ST77XX_BLACK);
+          digitalWrite(TFT_BACKLIGHT, LOW);
         }
       }
     }
