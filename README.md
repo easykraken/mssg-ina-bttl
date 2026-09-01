@@ -6,17 +6,7 @@ Pair the Feather with a LiPoly battery, drop them into a cute container and then
 
 <img src="./media/mssg-ina-diptych-1.0.0.jpg" style="width:auto; height:560px;" alt="mssg ina bttl in a tin with a key">
 
-[Video on Odysee](https://odysee.com/mssg:f?view=shorts)
-
-
-## Forked with thanks to SonicDH
-
-Community Hub
-- https://github.com/SonicDH/Community-Hub
-
-
-With an excellent breakdown by the author, Victor Frost:
-- https://www.heyvictorfrost.com/workshop/Community_hub_V1
+### [📺 Video on Odysee](https://odysee.com/mssg:f?view=shorts)
 
 
 ## Features
@@ -291,7 +281,7 @@ The project uses a small Python virtual environment for tooling. To rebuild both
 the printable PNG and the embedded TFT bitmap after changing the SSID or
 password:
 
-```bash
+``` bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install "qrcode[pil]"
@@ -481,3 +471,14 @@ The firmware also mitigates a few resource-abuse paths that are easy to hit on a
 ---
 
 > 💡 **Tip:** To customize the AP name, admin key, or default settings, edit the `Config` namespace at the top of `main.cpp` before your first upload. All runtime changes are persisted automatically.
+
+---
+
+## Forked with thanks to SonicDH
+
+Community Hub
+- https://github.com/SonicDH/Community-Hub
+
+
+With an excellent breakdown by the author, Victor Frost:
+- https://www.heyvictorfrost.com/workshop/Community_hub_V1
