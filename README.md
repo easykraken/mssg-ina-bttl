@@ -6,7 +6,7 @@ Pair the Feather with a LiPoly battery, drop them into a cute container and then
 
 <img src="./media/mssg-ina-diptych-1.0.0.jpg" style="width:auto; height:560px;" alt="mssg ina bttl in a tin with a key">
 
-### [📺 Video on Odysee](https://odysee.com/mssg:f?view=shorts)
+### 📺 [Video on Odysee](https://odysee.com/mssg:f?view=shorts)
 
 
 ## Features

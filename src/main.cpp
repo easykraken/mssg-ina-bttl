@@ -61,6 +61,7 @@ void drawTftText()
 
   tft.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
   tft.print("PASS: ");
+  tft.setTextSize(3);
   tft.setTextColor(ST77XX_ORANGE, ST77XX_BLACK);
   tft.println("bottle123");
 }

@@ -45,23 +45,17 @@ void drawTftText()
   tft.setTextWrap(true);
   tft.setTextSize(2);
 
-  int16_t lineHeight = 8 * 2;           // default GFX font is 8 px tall; text size = 2
-  int16_t blockHeight = lineHeight * 3; // line1 + blank + line2
-  int16_t y = (tft.height() - blockHeight) / 2;
+  int16_t lineHeight = 8 * 2; // default GFX font is 8 px tall; text size = 2
+
+  // Vertically center the single PASS line on screen.
+  int16_t y = (tft.height() + lineHeight) / 2;
 
   tft.setCursor(0, y);
 
   tft.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
-  tft.print("SSID: ");
-  tft.setTextColor(ST77XX_ORANGE, ST77XX_BLACK);
-  tft.println("mssg ina bttl");
-
-  tft.println();
-
-  tft.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
   tft.print("PASS: ");
   tft.setTextColor(ST77XX_ORANGE, ST77XX_BLACK);
-  tft.println("bottle123");
+  tft.print("bottle123");
 }
 
 void drawTftQr(bool inverted)
